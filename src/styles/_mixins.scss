@@ -1,0 +1,25 @@
+@mixin input-focus($color: #2563eb) {
+  outline: none;
+  border-color: $color;
+  box-shadow: 0 0 0 3px
+  color-mix(in srgb, $color 12%, transparent);
+}
+
+@mixin card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgb(15 23 42 / 4%);
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == tablet {
+    @media (max-width: 800px) {
+      @content;
+    }
+  } @else if $breakpoint == mobile {
+    @media (max-width: 520px) {
+      @content;
+    }
+  }
+}

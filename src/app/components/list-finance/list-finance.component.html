@@ -1,0 +1,206 @@
+<main class="app-page">
+  <div class="app-container">
+
+    <!-- Indicadores financeiros -->
+    <section class="list-summary-grid" aria-label="Resumo financeiro">
+
+      <article class="app-card metric-card">
+        <span class="metric-label">Total de receitas</span>
+
+        <strong class="metric-value income">
+          {{ totalReceitas() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </strong>
+
+        <span class="metric-description">
+          Entradas registradas
+        </span>
+      </article>
+
+      <article class="app-card metric-card">
+        <span class="metric-label">Total de despesas</span>
+
+        <strong class="metric-value expense">
+          {{ totalDespesas() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </strong>
+
+        <span class="metric-description">
+          Saídas registradas
+        </span>
+      </article>
+
+      <article class="app-card metric-card">
+        <span class="metric-label">Saldo</span>
+
+        <strong
+          class="metric-value"
+          [class.income]="saldo() >= 0"
+          [class.expense]="saldo() < 0"
+        >
+          {{ saldo() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </strong>
+
+        <span class="metric-description">
+          Receitas menos despesas
+        </span>
+      </article>
+
+    </section>
+
+    <!-- Tabela de lançamentos -->
+    <section class="app-card transactions-card">
+
+      <div class="transactions-heading">
+        <div>
+          <h2>Lançamentos</h2>
+          <p>
+            {{ lancamentosFiltrados().length }}
+            registro(s) encontrado(s)
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="app-btn app-btn--secondary"
+          [disabled]="carregando()"
+          (click)="carregar()"
+        >
+          {{ carregando() ? 'Atualizando...' : 'Atualizar' }}
+        </button>
+      </div>
+
+      <!-- Pesquisa e filtros -->
+      <div class="list-filters">
+
+        <div class="search-field">
+          <label for="busca">Pesquisar</label>
+
+          <input
+            id="busca"
+            name="busca"
+            type="search"
+            class="app-control"
+            placeholder="Descrição ou categoria..."
+            [ngModel]="busca()"
+            (ngModelChange)="busca.set($event)"
+          />
+        </div>
+
+        <div class="type-filter">
+          <label for="filtroTipo">Tipo de lançamento</label>
+
+          <select
+            id="filtroTipo"
+            name="filtroTipo"
+            class="app-control"
+            [ngModel]="filtroTipo()"
+            (ngModelChange)="alterarFiltro($event)"
+          >
+            <option value="todos">Todos</option>
+            <option value="entrada">Receitas</option>
+            <option value="saida">Despesas</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Carregamento -->
+      <div
+        *ngIf="carregando()"
+        class="list-feedback"
+        role="status"
+      >
+        Carregando lançamentos...
+      </div>
+
+      <!-- Erro -->
+      <div
+        *ngIf="erro()"
+        class="list-feedback error"
+        role="alert"
+      >
+        {{ erro() }}
+      </div>
+
+      <!-- Conteúdo carregado -->
+      <ng-container *ngIf="!carregando() && !erro()">
+
+        <div
+          *ngIf="lancamentosFiltrados().length > 0"
+          class="table-responsive"
+        >
+          <table class="transactions-table">
+            <thead>
+            <tr>
+              <th scope="col">Data</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">Tipo</th>
+              <th scope="col" class="amount-column">Valor</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let item of lancamentosFiltrados()">
+
+              <td class="date-cell">
+                {{ (item.data + 'T12:00:00') | date:'dd/MM/yyyy' }}
+              </td>
+
+              <td class="description-cell">
+                {{ item.descricao }}
+              </td>
+
+              <td>
+                  <span class="category-label">
+                    {{ item.categoria }}
+                  </span>
+              </td>
+
+              <td>
+                  <span
+                    class="type-badge"
+                    [class.income]="item.tipo === 'entrada'"
+                    [class.expense]="item.tipo === 'saida'"
+                  >
+                    {{ item.tipo === 'entrada' ? 'Receita' : 'Despesa' }}
+                  </span>
+              </td>
+
+              <td
+                class="amount-column amount-cell"
+                [class.income]="item.tipo === 'entrada'"
+                [class.expense]="item.tipo === 'saida'"
+              >
+                {{ item.tipo === 'entrada' ? '+' : '-' }}
+                {{ item.valor | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Lista vazia -->
+        <div
+          *ngIf="lancamentosFiltrados().length === 0"
+          class="empty-state"
+        >
+          <div class="empty-state-icon" aria-hidden="true">↗</div>
+
+          <h3>Nenhum lançamento encontrado</h3>
+
+          <p>
+            {{
+              busca() || filtroTipo() !== 'todos'
+                ? 'Tente alterar a pesquisa ou o filtro selecionado.'
+                : 'Cadastre sua primeira receita ou despesa para começar.'
+            }}
+          </p>
+        </div>
+
+      </ng-container>
+
+    </section>
+
+  </div>
+</main>

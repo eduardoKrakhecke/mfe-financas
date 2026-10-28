@@ -1,0 +1,95 @@
+@use 'styles/variables' as vars;
+
+.app-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 42px;
+  padding: 10px 18px;
+
+  border: 1px solid transparent;
+  border-radius: vars.$border-radius-md;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:focus-visible {
+    outline: 3px solid rgb(37 99 235 / 25%);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Botão principal: salvar, confirmar, cadastrar
+.app-btn--primary {
+  background: vars.$color-primary;
+  border-color: vars.$color-primary;
+  color: vars.$color-white;
+
+  &:hover:not(:disabled) {
+    background: vars.$color-primary-hover;
+    border-color: vars.$color-primary-hover;
+  }
+}
+
+// Botão secundário: cancelar, voltar
+.app-btn--secondary {
+  background: vars.$color-white;
+  border-color: vars.$color-border;
+  color: vars.$color-text;
+
+  &:hover:not(:disabled) {
+    background: vars.$color-background;
+  }
+}
+
+// Botão de ação destrutiva: excluir
+.app-btn--danger {
+  background: vars.$color-danger;
+  border-color: vars.$color-danger;
+  color: vars.$color-white;
+
+  &:hover:not(:disabled) {
+    background: #b91c1c;
+    border-color: #b91c1c;
+  }
+}
+
+// Botão discreto, sem fundo
+.app-btn--ghost {
+  background: transparent;
+  color: vars.$color-primary;
+
+  &:hover:not(:disabled) {
+    background: rgb(37 99 235 / 8%);
+  }
+}
+
+// Botão ocupando toda a largura disponível
+.app-btn--block {
+  width: 100%;
+}
+
+// Botão compacto
+.app-btn--sm {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 12px;
+}

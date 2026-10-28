@@ -1,0 +1,195 @@
+<main class="finance-page">
+  <header class="page-header">
+    <span class="eyebrow">GESTÃO FINANCEIRA</span>
+
+    <h1>Novo lançamento</h1>
+
+    <p>
+      Registre suas receitas e despesas para manter suas finanças organizadas.
+    </p>
+  </header>
+
+  <div class="content-grid">
+    <section class="form-card">
+      <div class="card-heading">
+        <div>
+          <h2>Dados do lançamento</h2>
+          <p>Preencha os campos abaixo.</p>
+        </div>
+
+        <span class="required-note">* Obrigatório</span>
+      </div>
+
+      <form (ngSubmit)="salvar()">
+        <div class="field">
+          <label for="descricao">Descrição *</label>
+
+          <input
+            id="descricao"
+            name="descricao"
+            type="text"
+            placeholder="Ex.: Compra no supermercado"
+            [ngModel]="descricao()"
+            (ngModelChange)="descricao.set($event)"
+            maxlength="120"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="categoria">Categoria *</label>
+
+            <select
+              id="categoria"
+              name="categoria"
+              [ngModel]="categoria()"
+              (ngModelChange)="categoria.set($event)"
+              required
+            >
+              <option value="" disabled>
+                Selecione uma categoria
+              </option>
+
+              <option
+                *ngFor="let item of categorias"
+                [value]="item"
+              >
+                {{ item }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="tipo">Tipo *</label>
+
+            <select
+              id="tipo"
+              name="tipo"
+              [ngModel]="tipo()"
+              (ngModelChange)="alterarTipo($event)"
+              required
+            >
+              <option value="saida">Despesa</option>
+              <option value="entrada">Entrada / Receita</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="valor">Valor *</label>
+
+            <div class="currency-input">
+              <span>R$</span>
+
+              <input
+                id="valor"
+                name="valor"
+                type="text"
+                class="app-control"
+                appCurrencyMask
+                inputmode="numeric"
+                placeholder="0,00"
+                autocomplete="off"
+                [ngModel]="valor()"
+                (ngModelChange)="valor.set($event)"
+                required
+              />
+            </div>
+
+            <small>Exemplo: 125,90 ou 1.250,90</small>
+          </div>
+
+          <div class="field">
+            <label for="data">Data *</label>
+
+            <input
+              id="data"
+              name="data"
+              type="date"
+              [ngModel]="data()"
+              (ngModelChange)="data.set($event)"
+              required
+            />
+          </div>
+        </div>
+
+        <div
+          *ngIf="mensagem()"
+          class="feedback success"
+          role="status"
+          aria-live="polite"
+        >
+          {{ mensagem() }}
+        </div>
+
+        <div
+          *ngIf="erro()"
+          class="feedback error"
+          role="alert"
+        >
+          {{ erro() }}
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="button-secondary"
+            (click)="limparCampos()"
+          >
+            Limpar
+          </button>
+
+          <button
+            type="submit"
+            class="button-primary"
+            [disabled]="!podeSalvar()"
+          >
+            {{ salvando() ? 'Salvando...' : 'Salvar lançamento' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="summary-card">
+      <div class="summary-icon">
+        {{ tipo() === 'entrada' ? '↗' : '↘' }}
+      </div>
+
+      <p class="summary-label">Prévia do lançamento</p>
+
+      <h2>{{ descricao() || 'Novo lançamento' }}</h2>
+
+      <div
+        class="summary-value"
+        [class.income]="tipo() === 'entrada'"
+        [class.expense]="tipo() === 'saida'"
+      >
+        {{ tipo() === 'entrada' ? '+' : '-' }}
+        {{ valorFormatado() }}
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-item">
+        <span>Categoria</span>
+        <strong>{{ categoria() || 'Não definida' }}</strong>
+      </div>
+
+      <div class="summary-item">
+        <span>Tipo</span>
+        <strong>
+          {{ tipo() === 'entrada' ? 'Receita' : 'Despesa' }}
+        </strong>
+      </div>
+
+      <div class="summary-item">
+        <span>Data</span>
+        <strong>
+          {{ data() ? (data() | date:'dd/MM/yyyy') : 'Não definida' }}
+        </strong>
+      </div>
+    </aside>
+  </div>
+</main>

@@ -1,0 +1,145 @@
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mixins;
+
+// Estrutura base das páginas
+.app-page {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: vars.$spacing-xl;
+
+  background: vars.$color-background;
+  color: vars.$color-text;
+}
+
+// Cabeçalho da página
+.app-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-bottom: vars.$spacing-lg;
+
+  h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    color: vars.$color-text-muted;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+.app-eyebrow {
+  color: vars.$color-primary;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+// Container centralizado
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+// Grid padrão para conteúdo
+.app-content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr);
+  align-items: start;
+  gap: vars.$spacing-lg;
+}
+
+// Cards reutilizáveis
+.app-card {
+  @include mixins.card;
+
+  min-width: 0;
+  padding: vars.$spacing-lg;
+}
+
+// Cabeçalho de seção dentro de um card
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+
+  margin-bottom: vars.$spacing-lg;
+
+  h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 6px 0 0;
+    color: vars.$color-text-muted;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+// Elementos organizados em coluna
+.app-stack {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+}
+
+// Elementos organizados em linha
+.app-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: vars.$spacing-md;
+}
+
+// Área separada por uma borda
+.app-section {
+  padding-block: vars.$spacing-lg;
+  border-bottom: 1px solid vars.$color-border;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+// Responsividade
+@include mixins.respond-to(tablet) {
+  .app-page {
+    padding: vars.$spacing-lg;
+  }
+
+  .app-content-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@include mixins.respond-to(mobile) {
+  .app-page {
+    padding: vars.$spacing-md;
+  }
+
+  .app-page-header h1 {
+    font-size: 24px;
+  }
+
+  .app-card {
+    padding: vars.$spacing-md;
+  }
+
+  .app-content-grid {
+    gap: vars.$spacing-md;
+  }
+}

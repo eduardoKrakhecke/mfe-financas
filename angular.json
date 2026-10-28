@@ -19,6 +19,11 @@
 					"options": {
 						"outputPath": "dist/mfe-financas",
 						"index": "src/index.html",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src"
+              ]
+            },
 						"polyfills": [
 							"zone.js"
 						],
